@@ -17,17 +17,11 @@ export class locationsRelationalRepository implements LocationsRepository {
 
   async create(data: Locations): Promise<Locations> {
     const persistenceModel = LocationsMapper.toPersistence(data);
-    const newEntity = await this.locationsRepository.save(
-      this.locationsRepository.create(persistenceModel),
-    );
+    const newEntity = await this.locationsRepository.save(this.locationsRepository.create(persistenceModel));
     return LocationsMapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }): Promise<Locations[]> {
+  async findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }): Promise<Locations[]> {
     const entities = await this.locationsRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
@@ -52,10 +46,7 @@ export class locationsRelationalRepository implements LocationsRepository {
     return entities.map((entity) => LocationsMapper.toDomain(entity));
   }
 
-  async update(
-    id: Locations['id'],
-    payload: Partial<Locations>,
-  ): Promise<Locations> {
+  async update(id: Locations['id'], payload: Partial<Locations>): Promise<Locations> {
     const entity = await this.locationsRepository.findOne({
       where: { id: Number(id) },
     });

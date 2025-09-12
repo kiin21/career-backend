@@ -4,34 +4,25 @@ import {
 } from '@nestjs/common';
 import { CreatecompaniesDto } from './dto/create-companies.dto';
 import { UpdatecompaniesDto } from './dto/update-companies.dto';
-import { companiesRepository } from './infrastructure/persistence/companies.repository';
+import { CompaniesRepository } from './infrastructure/persistence/companies.repository';
 import { IPaginationOptions } from '../utils/types/pagination-options';
 import { Companies } from './domain/companies';
 
 @Injectable()
-export class companiesService {
+export class CompaniesService {
   constructor(
     // Dependencies here
-    private readonly companiesRepository: companiesRepository,
-  ) { }
+    private readonly companiesRepository: CompaniesRepository,
+  ) {}
 
-  async create(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    createcompaniesDto: CreatecompaniesDto,
-  ) {
-    // Do not remove comment below.
-    // <creating-property />
-
+  async create(createcompaniesDto: CreatecompaniesDto) {
     return this.companiesRepository.create({
       name: createcompaniesDto.name,
+      logo_url: createcompaniesDto.logo_url,
     });
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }) {
     return this.companiesRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,

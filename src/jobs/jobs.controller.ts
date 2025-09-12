@@ -1,93 +1,111 @@
-import { Controller, Get, Param, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { JobsService } from './jobs.service';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiParam, ApiTags, ApiBody } from '@nestjs/swagger';
 import { Jobs } from './domain/jobs';
-import {
-  StandardPaginationResponse,
-  StandardPaginationResponseDto,
-} from '../utils/dto/standard-pagination-response.dto';
-import { standardPagination } from '../utils/standard-pagination';
-import { QueryJobsDto } from './dto/query-job.dto';
+import { StandardPaginationResponseDto } from '../utils/dto/standard-pagination-response.dto';
+import { PaginationQueryDto, SearchJobDto } from './dto/search-job.dto';
 import { Request } from 'express';
+import { ApiResponse, PaginatedResponse } from '../utils/api-response';
 
 @ApiTags('Jobs')
-@Controller({
-  path: 'jobs',
-  version: '1',
-})
+@ApiOkResponse({ type: StandardPaginationResponseDto })
+@Controller({ path: 'jobs', version: '1' })
 export class JobsController {
-  constructor(private readonly jobsService: JobsService) { }
+  constructor(private readonly jobsService: JobsService) {}
 
-  @Get()
-  @ApiOkResponse({ type: StandardPaginationResponse(Jobs) })
-  async findAll(
-    @Query() query: QueryJobsDto,
+  @Post()
+  @ApiOkResponse({ type: StandardPaginationResponseDto })
+  @ApiBody({ type: SearchJobDto })
+  async findManyWithPagination(
+    @Body() searchDto: SearchJobDto,
+    @Query() paginationQuery: PaginationQueryDto,
     @Req() request: Request,
-  ): Promise<StandardPaginationResponseDto<Jobs>> {
-    const page = query?.page ?? 1;
-    let limit = query?.limit ?? 12;
+  ): Promise<PaginatedResponse<Jobs>> {
+    const page = paginationQuery?.page ?? 1;
+    let limit = paginationQuery?.limit ?? 12;
     if (limit > 50) {
       limit = 50;
     }
 
+    const filterOptions: any = {};
+
+    if (searchDto.location && searchDto.location.length > 0) {
+      filterOptions.location = searchDto.location;
+    }
+
+    if (searchDto.salary) {
+      filterOptions.salary = searchDto.salary;
+    }
+
+    if (searchDto.company) {
+      filterOptions.company = searchDto.company;
+    }
+
+    if (searchDto.employment_type) {
+      filterOptions.employment_type = searchDto.employment_type;
+    }
+
     const result = await this.jobsService.findManyWithPagination({
-      filterOptions: query?.filters,
-      sortOptions: query?.sort,
+      filterOptions: Object.keys(filterOptions).length > 0 ? filterOptions : null,
+      sortOptions: searchDto.sort,
       paginationOptions: { page, limit },
+      search: searchDto.search,
     });
 
-    // Build base URL
     const baseUrl = `${request.protocol}://${request.get('host')}${request.route.path}`;
 
-    // Extract query params for pagination links
-    const queryParams: any = {};
-    if (query?.filters) {
-      if (query.filters.location?.length) {
-        queryParams.location = query.filters.location;
-      }
-      if (query.filters.salary) {
-        if (query.filters.salary.min !== undefined) {
-          queryParams.salary_min = query.filters.salary.min;
-        }
-        if (query.filters.salary.max !== undefined) {
-          queryParams.salary_max = query.filters.salary.max;
-        }
-        if (query.filters.salary.currency) {
-          queryParams.salary_currency = query.filters.salary.currency;
-        }
-      }
-      if (query.filters.company?.id) {
-        queryParams.company_id = query.filters.company.id;
-      }
-      if (query.filters.company?.name) {
-        queryParams.company_name = query.filters.company.name;
-      }
+    const activeFilters: any = {};
+    if (searchDto.location && searchDto.location.length > 0) {
+      activeFilters.location = searchDto.location;
     }
-    if (query?.sort?.length) {
-      queryParams.sort = query.sort
-        .map((s) => `${s.orderBy}:${s.order}`)
-        .join(',');
+    if (searchDto.salary) {
+      const salaryFilter: any = {};
+      if (searchDto.salary.min !== undefined) {
+        salaryFilter.min = searchDto.salary.min;
+      }
+      if (searchDto.salary.max !== undefined) {
+        salaryFilter.max = searchDto.salary.max;
+      }
+      if (Object.keys(salaryFilter).length > 0) {
+        activeFilters.salary = salaryFilter;
+      }
     }
 
-    return standardPagination(result.data, {
-      page,
-      limit,
-      totalItems: result.totalItems,
+    if (searchDto.company) {
+      const companyFilter: any = {};
+      if (searchDto.company.ids && searchDto.company.ids.length > 0) {
+        companyFilter.ids = searchDto.company.ids;
+      }
+      if (Object.keys(companyFilter).length > 0) {
+        activeFilters.company = companyFilter;
+      }
+    }
+
+    return ApiResponse.paginated(
+      result.data,
+      {
+        current_page: page,
+        per_page: limit,
+        total_items: result.totalItems,
+      },
       baseUrl,
-      queryParams,
-    });
+      'Jobs retrieved successfully',
+      Object.keys(activeFilters).length > 0 ? activeFilters : undefined,
+      'OK',
+      { ...searchDto, ...paginationQuery },
+    );
   }
 
   @Get(':id')
-  @ApiParam({
-    name: 'id',
-    type: String,
-    required: true,
-  })
-  @ApiOkResponse({
-    type: Jobs,
-  })
-  findById(@Param('id') id: string) {
-    return this.jobsService.findById(Number(id));
+  @ApiParam({ name: 'id', type: String, required: true })
+  @ApiOkResponse({ type: Jobs })
+  async findById(@Param('id') id: string) {
+    const job = await this.jobsService.findById(Number(id));
+
+    if (!job) {
+      return ApiResponse.error(null, 'JOB_NOT_FOUND');
+    }
+
+    return ApiResponse.success(job, 'Job retrieved successfully', 'OK');
   }
 }

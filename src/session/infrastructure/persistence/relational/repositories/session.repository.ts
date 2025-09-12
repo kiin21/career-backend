@@ -29,16 +29,12 @@ export class SessionRelationalRepository implements SessionRepository {
 
   async create(data: Session): Promise<Session> {
     const persistenceModel = SessionMapper.toPersistence(data);
-    return this.sessionRepository.save(
-      this.sessionRepository.create(persistenceModel),
-    );
+    return this.sessionRepository.save(this.sessionRepository.create(persistenceModel));
   }
 
   async update(
     id: Session['id'],
-    payload: Partial<
-      Omit<Session, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>
-    >,
+    payload: Partial<Omit<Session, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>,
   ): Promise<Session | null> {
     const entity = await this.sessionRepository.findOne({
       where: { id: Number(id) },

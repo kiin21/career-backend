@@ -4,36 +4,30 @@ import { Repository, In } from 'typeorm';
 import { CompaniesEntity } from '../entities/companies.entity';
 import { NullableType } from '../../../../../utils/types/nullable.type';
 import { Companies } from '../../../../domain/companies';
-import { companiesRepository } from '../../companies.repository';
-import { companiesMapper } from '../mappers/companies.mapper';
+import { CompaniesRepository } from '../../companies.repository';
+import { CompaniesMapper } from '../mappers/companies.mapper';
 import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
-export class companiesRelationalRepository implements companiesRepository {
+export class CompaniesRelationalRepository implements CompaniesRepository {
   constructor(
     @InjectRepository(CompaniesEntity)
     private readonly companiesRepository: Repository<CompaniesEntity>,
   ) {}
 
   async create(data: Companies): Promise<Companies> {
-    const persistenceModel = companiesMapper.toPersistence(data);
-    const newEntity = await this.companiesRepository.save(
-      this.companiesRepository.create(persistenceModel),
-    );
-    return companiesMapper.toDomain(newEntity);
+    const persistenceModel = CompaniesMapper.toPersistence(data);
+    const newEntity = await this.companiesRepository.save(this.companiesRepository.create(persistenceModel));
+    return CompaniesMapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }): Promise<Companies[]> {
+  async findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }): Promise<Companies[]> {
     const entities = await this.companiesRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
     });
 
-    return entities.map((entity) => companiesMapper.toDomain(entity));
+    return entities.map((entity) => CompaniesMapper.toDomain(entity));
   }
 
   async findById(id: Companies['id']): Promise<NullableType<Companies>> {
@@ -41,7 +35,7 @@ export class companiesRelationalRepository implements companiesRepository {
       where: { id: Number(id) },
     });
 
-    return entity ? companiesMapper.toDomain(entity) : null;
+    return entity ? CompaniesMapper.toDomain(entity) : null;
   }
 
   async findByIds(ids: Companies['id'][]): Promise<Companies[]> {
@@ -49,13 +43,10 @@ export class companiesRelationalRepository implements companiesRepository {
       where: { id: In(ids) },
     });
 
-    return entities.map((entity) => companiesMapper.toDomain(entity));
+    return entities.map((entity) => CompaniesMapper.toDomain(entity));
   }
 
-  async update(
-    id: Companies['id'],
-    payload: Partial<Companies>,
-  ): Promise<Companies> {
+  async update(id: Companies['id'], payload: Partial<Companies>): Promise<Companies> {
     const entity = await this.companiesRepository.findOne({
       where: { id: Number(id) },
     });
@@ -66,14 +57,14 @@ export class companiesRelationalRepository implements companiesRepository {
 
     const updatedEntity = await this.companiesRepository.save(
       this.companiesRepository.create(
-        companiesMapper.toPersistence({
-          ...companiesMapper.toDomain(entity),
+        CompaniesMapper.toPersistence({
+          ...CompaniesMapper.toDomain(entity),
           ...payload,
         }),
       ),
     );
 
-    return companiesMapper.toDomain(updatedEntity);
+    return CompaniesMapper.toDomain(updatedEntity);
   }
 
   async remove(id: Companies['id']): Promise<void> {

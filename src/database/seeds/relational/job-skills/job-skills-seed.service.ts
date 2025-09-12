@@ -132,9 +132,7 @@ export class JobSkillsSeedService {
       ];
 
       for (const jobSkill of jobSkills) {
-        await this.jobSkillsRepository.save(
-          this.jobSkillsRepository.create(jobSkill),
-        );
+        await this.jobSkillsRepository.save(this.jobSkillsRepository.create(jobSkill));
       }
     }
   }

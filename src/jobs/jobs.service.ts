@@ -1,32 +1,29 @@
-import {
-  // common
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JobsRepository } from './infrastructure/persistence/jobs.repository';
 import { IPaginationOptions } from '../utils/types/pagination-options';
 import { Jobs } from './domain/jobs';
-import { FilterJobsDto, SortJobsDto } from './dto/query-job.dto';
+import { SearchJobDto, SortJobDto } from './dto/search-job.dto';
 
 @Injectable()
 export class JobsService {
-  constructor(
-    // Dependencies here
-    private readonly jobsRepository: JobsRepository,
-  ) { }
+  constructor(private readonly jobsRepository: JobsRepository) {}
 
   findManyWithPagination({
     filterOptions,
     sortOptions,
     paginationOptions,
+    search,
   }: {
-    filterOptions?: FilterJobsDto | null;
-    sortOptions?: SortJobsDto[] | null;
+    filterOptions?: SearchJobDto | null;
+    sortOptions?: SortJobDto[] | null;
     paginationOptions: IPaginationOptions;
+    search?: string;
   }): Promise<{ data: Jobs[]; totalItems: number }> {
     return this.jobsRepository.findManyWithPagination({
       filterOptions,
       sortOptions,
       paginationOptions,
+      search,
     });
   }
 

@@ -14,4 +14,6 @@ import { JobsEntity } from './entities/jobs.entity';
   ],
   exports: [JobsRepository],
 })
-export class RelationalJobsPersistenceModule {}
+export class RelationalJobsPersistenceModule {
+  z;
+}

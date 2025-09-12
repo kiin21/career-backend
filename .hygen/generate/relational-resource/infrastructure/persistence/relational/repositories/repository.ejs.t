@@ -26,17 +26,20 @@ export class <%= name %>RelationalRepository implements <%= name %>Repository {
     return <%= name %>Mapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination({
+  async findManyWithPagination({
     paginationOptions,
   }: {
     paginationOptions: IPaginationOptions;
-  }): Promise<<%= name %>[]> {
-    const entities = await this.<%= h.inflection.camelize(name, true) %>Repository.find({
+  }): Promise<{ data: <%= name %>[]; totalItems: number }> {
+    const [entities, totalItems] = await this.<%= h.inflection.camelize(name, true) %>Repository.findAndCount({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
     });
 
-    return entities.map((entity) => <%= name %>Mapper.toDomain(entity));
+    return {
+      data: entities.map((entity) => <%= name %>Mapper.toDomain(entity)),
+      totalItems,
+    };
   }
 
   async findById(id: <%= name %>['id']): Promise<NullableType<<%= name %>>> {

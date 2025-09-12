@@ -28,11 +28,7 @@ export class IndustriesService {
     });
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }) {
     return this.industriesRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,

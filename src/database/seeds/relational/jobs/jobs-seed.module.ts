@@ -8,14 +8,7 @@ import { JobCategoriesEntity } from '../../../../job-categories/infrastructure/p
 import { LocationsEntity } from '../../../../locations/infrastructure/persistence/relational/entities/locations.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      JobsEntity,
-      CompaniesEntity,
-      JobCategoriesEntity,
-      LocationsEntity,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([JobsEntity, CompaniesEntity, JobCategoriesEntity, LocationsEntity])],
   providers: [JobsSeedService],
   exports: [JobsSeedService],
 })

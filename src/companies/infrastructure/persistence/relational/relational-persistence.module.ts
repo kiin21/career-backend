@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { companiesRepository } from '../companies.repository';
-import { companiesRelationalRepository } from './repositories/companies.repository';
+import { CompaniesRepository } from '../companies.repository';
+import { CompaniesRelationalRepository } from './repositories/companies.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompaniesEntity } from './entities/companies.entity';
 
@@ -8,10 +8,10 @@ import { CompaniesEntity } from './entities/companies.entity';
   imports: [TypeOrmModule.forFeature([CompaniesEntity])],
   providers: [
     {
-      provide: companiesRepository,
-      useClass: companiesRelationalRepository,
+      provide: CompaniesRepository,
+      useClass: CompaniesRelationalRepository,
     },
   ],
-  exports: [companiesRepository],
+  exports: [CompaniesRepository],
 })
 export class RelationalcompaniesPersistenceModule {}

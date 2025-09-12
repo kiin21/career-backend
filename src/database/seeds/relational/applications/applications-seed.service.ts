@@ -220,9 +220,7 @@ export class ApplicationsSeedService {
       ];
 
       for (const application of applications) {
-        await this.applicationsRepository.save(
-          this.applicationsRepository.create(application),
-        );
+        await this.applicationsRepository.save(this.applicationsRepository.create(application));
       }
     }
   }

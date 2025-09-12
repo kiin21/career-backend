@@ -4,9 +4,7 @@ import { IPaginationOptions } from '../../../utils/types/pagination-options';
 import { Applications } from '../../domain/applications';
 
 export abstract class ApplicationsRepository {
-  abstract create(
-    data: Omit<Applications, 'id' | 'created_at' | 'updated_at'>,
-  ): Promise<Applications>;
+  abstract create(data: Omit<Applications, 'id' | 'created_at' | 'updated_at'>): Promise<Applications>;
 
   abstract findAllWithPagination({
     paginationOptions,
@@ -14,16 +12,11 @@ export abstract class ApplicationsRepository {
     paginationOptions: IPaginationOptions;
   }): Promise<Applications[]>;
 
-  abstract findById(
-    id: Applications['id'],
-  ): Promise<NullableType<Applications>>;
+  abstract findById(id: Applications['id']): Promise<NullableType<Applications>>;
 
   abstract findByIds(ids: Applications['id'][]): Promise<Applications[]>;
 
-  abstract update(
-    id: Applications['id'],
-    payload: DeepPartial<Applications>,
-  ): Promise<Applications | null>;
+  abstract update(id: Applications['id'], payload: DeepPartial<Applications>): Promise<Applications | null>;
 
   abstract remove(id: Applications['id']): Promise<void>;
 }

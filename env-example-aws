@@ -1,0 +1,90 @@
+# ==============================================
+# AWS PRODUCTION ENVIRONMENT CONFIGURATION
+# ==============================================
+
+# Application Settings
+NODE_ENV=production
+APP_PORT=3000
+APP_NAME="Career Backend API"
+API_PREFIX=api
+APP_FALLBACK_LANGUAGE=en
+APP_HEADER_LANGUAGE=x-custom-lang
+FRONTEND_DOMAIN=https://your-frontend-domain.com
+BACKEND_DOMAIN=https://your-api-domain.com
+
+# ==============================================
+# AWS RDS DATABASE CONFIGURATION
+# ==============================================
+DATABASE_TYPE=postgres
+DATABASE_HOST=your-rds-endpoint.region.rds.amazonaws.com
+DATABASE_PORT=5432
+DATABASE_USERNAME=your_db_username
+DATABASE_PASSWORD=your_secure_db_password
+DATABASE_NAME=career_production
+DATABASE_SYNCHRONIZE=false
+DATABASE_MAX_CONNECTIONS=100
+DATABASE_SSL_ENABLED=true
+DATABASE_REJECT_UNAUTHORIZED=false
+
+# ==============================================
+# JWT AUTHENTICATION SECRETS
+# ==============================================
+# Generate strong secrets using: openssl rand -base64 32
+AUTH_JWT_SECRET=your_very_secure_jwt_secret_here
+AUTH_JWT_TOKEN_EXPIRES_IN=1d
+AUTH_REFRESH_SECRET=your_very_secure_refresh_secret_here
+AUTH_REFRESH_TOKEN_EXPIRES_IN=7d
+AUTH_CONFIRM_EMAIL_SECRET=your_very_secure_confirm_email_secret_here
+AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN=1d
+AUTH_FORGOT_SECRET=your_very_secure_forgot_password_secret_here
+AUTH_FORGOT_TOKEN_EXPIRES_IN=1h
+
+# ==============================================
+# AWS SES EMAIL CONFIGURATION
+# ==============================================
+MAIL_HOST=email-smtp.us-east-1.amazonaws.com
+MAIL_PORT=587
+MAIL_USER=your_ses_smtp_username
+MAIL_PASSWORD=your_ses_smtp_password
+MAIL_IGNORE_TLS=false
+MAIL_SECURE=false
+MAIL_REQUIRE_TLS=true
+MAIL_DEFAULT_EMAIL=noreply@your-domain.com
+MAIL_DEFAULT_NAME="Career Platform"
+MAIL_CLIENT_PORT=1080
+
+# ==============================================
+# AWS S3 FILE STORAGE
+# ==============================================
+FILE_DRIVER=s3
+ACCESS_KEY_ID=your_s3_access_key_id
+SECRET_ACCESS_KEY=your_s3_secret_access_key
+AWS_S3_REGION=us-east-1
+AWS_DEFAULT_S3_BUCKET=your-career-app-files
+
+# ==============================================
+# REDIS CONFIGURATION (AWS ElastiCache)
+# ==============================================
+REDIS_HOST=your-redis-cluster.cache.amazonaws.com
+REDIS_PORT=6379
+
+# ==============================================
+# WORKER CONFIGURATION (if using Bull Queue)
+# ==============================================
+WORKER_HOST=redis
+WORKER_PORT=6379
+WORKER_USERNAME=
+WORKER_PASSWORD=
+
+# ==============================================
+# AWS SPECIFIC CONFIGURATIONS
+# ==============================================
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+
+# ==============================================
+# MONITORING & LOGGING
+# ==============================================
+LOG_LEVEL=info
+ENABLE_DOCUMENTATION=false

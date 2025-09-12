@@ -9,9 +9,7 @@ import { ApplicationsMapper } from '../mappers/applications.mapper';
 import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
-export class ApplicationsRelationalRepository
-  implements ApplicationsRepository
-{
+export class ApplicationsRelationalRepository implements ApplicationsRepository {
   constructor(
     @InjectRepository(ApplicationsEntity)
     private readonly applicationsRepository: Repository<ApplicationsEntity>,
@@ -19,9 +17,7 @@ export class ApplicationsRelationalRepository
 
   async create(data: Applications): Promise<Applications> {
     const persistenceModel = ApplicationsMapper.toPersistence(data);
-    const newEntity = await this.applicationsRepository.save(
-      this.applicationsRepository.create(persistenceModel),
-    );
+    const newEntity = await this.applicationsRepository.save(this.applicationsRepository.create(persistenceModel));
     return ApplicationsMapper.toDomain(newEntity);
   }
 
@@ -54,10 +50,7 @@ export class ApplicationsRelationalRepository
     return entities.map((entity) => ApplicationsMapper.toDomain(entity));
   }
 
-  async update(
-    id: Applications['id'],
-    payload: Partial<Applications>,
-  ): Promise<Applications> {
+  async update(id: Applications['id'], payload: Partial<Applications>): Promise<Applications> {
     const entity = await this.applicationsRepository.findOne({
       where: { id: Number(id) },
     });

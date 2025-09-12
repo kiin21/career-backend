@@ -17,17 +17,11 @@ export class JobSkillsRelationalRepository implements JobSkillsRepository {
 
   async create(data: JobSkills): Promise<JobSkills> {
     const persistenceModel = JobSkillsMapper.toPersistence(data);
-    const newEntity = await this.jobSkillsRepository.save(
-      this.jobSkillsRepository.create(persistenceModel),
-    );
+    const newEntity = await this.jobSkillsRepository.save(this.jobSkillsRepository.create(persistenceModel));
     return JobSkillsMapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }): Promise<JobSkills[]> {
+  async findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }): Promise<JobSkills[]> {
     const entities = await this.jobSkillsRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
@@ -52,10 +46,7 @@ export class JobSkillsRelationalRepository implements JobSkillsRepository {
     return entities.map((entity) => JobSkillsMapper.toDomain(entity));
   }
 
-  async update(
-    id: JobSkills['id'],
-    payload: Partial<JobSkills>,
-  ): Promise<JobSkills> {
+  async update(id: JobSkills['id'], payload: Partial<JobSkills>): Promise<JobSkills> {
     const entity = await this.jobSkillsRepository.findOne({
       where: { job_id: Number(id) },
     });

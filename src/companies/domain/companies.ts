@@ -8,4 +8,6 @@ export class Companies {
 
   @ApiProperty({ type: String })
   name: string;
+
+  logo_url: string | null;
 }

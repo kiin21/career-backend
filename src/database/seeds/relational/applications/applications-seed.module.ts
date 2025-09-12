@@ -7,9 +7,7 @@ import { JobsEntity } from '../../../../jobs/infrastructure/persistence/relation
 import { UserEntity } from '../../../../users/infrastructure/persistence/relational/entities/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ApplicationsEntity, JobsEntity, UserEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([ApplicationsEntity, JobsEntity, UserEntity])],
   providers: [ApplicationsSeedService],
   exports: [ApplicationsSeedService],
 })

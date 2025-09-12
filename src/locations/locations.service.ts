@@ -15,10 +15,7 @@ export class locationsService {
     private readonly locationsRepository: LocationsRepository,
   ) {}
 
-  async create(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    createlocationsDto: CreatelocationsDto,
-  ) {
+  async create(createlocationsDto: CreatelocationsDto) {
     // Do not remove comment below.
     // <creating-property />
 
@@ -27,11 +24,7 @@ export class locationsService {
     });
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }) {
     return this.locationsRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,

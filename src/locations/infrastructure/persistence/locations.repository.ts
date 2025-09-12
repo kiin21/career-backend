@@ -4,9 +4,7 @@ import { IPaginationOptions } from '../../../utils/types/pagination-options';
 import { Locations } from '../../domain/locations';
 
 export abstract class LocationsRepository {
-  abstract create(
-    data: Omit<Locations, 'id' | 'created_at' | 'updated_at'>,
-  ): Promise<Locations>;
+  abstract create(data: Omit<Locations, 'id' | 'created_at' | 'updated_at'>): Promise<Locations>;
 
   abstract findAllWithPagination({
     paginationOptions,
@@ -18,10 +16,7 @@ export abstract class LocationsRepository {
 
   abstract findByIds(ids: Locations['id'][]): Promise<Locations[]>;
 
-  abstract update(
-    id: Locations['id'],
-    payload: DeepPartial<Locations>,
-  ): Promise<Locations | null>;
+  abstract update(id: Locations['id'], payload: DeepPartial<Locations>): Promise<Locations | null>;
 
   abstract remove(id: Locations['id']): Promise<void>;
 }

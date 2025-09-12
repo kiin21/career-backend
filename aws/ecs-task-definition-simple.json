@@ -1,0 +1,93 @@
+{
+  "family": "career-backend-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::412381742784:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::412381742784:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "career-backend",
+      "image": "412381742784.dkr.ecr.ap-southeast-1.amazonaws.com/career-backend:latest",
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "APP_PORT",
+          "value": "3000"
+        },
+        {
+          "name": "API_PREFIX",
+          "value": "api"
+        },
+        {
+          "name": "DATABASE_TYPE",
+          "value": "postgres"
+        },
+        {
+          "name": "DATABASE_SSL_ENABLED",
+          "value": "true"
+        },
+        {
+          "name": "DATABASE_SYNCHRONIZE",
+          "value": "false"
+        },
+        {
+          "name": "FILE_DRIVER",
+          "value": "local"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DATABASE_HOST",
+          "valueFrom": "arn:aws:ssm:ap-southeast-1:412381742784:parameter/career-backend/database-host"
+        },
+        {
+          "name": "DATABASE_USERNAME",
+          "valueFrom": "arn:aws:ssm:ap-southeast-1:412381742784:parameter/career-backend/database-username"
+        },
+        {
+          "name": "DATABASE_PASSWORD",
+          "valueFrom": "arn:aws:ssm:ap-southeast-1:412381742784:parameter/career-backend/database-password"
+        },
+        {
+          "name": "DATABASE_NAME",
+          "valueFrom": "arn:aws:ssm:ap-southeast-1:412381742784:parameter/career-backend/database-name"
+        },
+        {
+          "name": "AUTH_JWT_SECRET",
+          "valueFrom": "arn:aws:ssm:ap-southeast-1:412381742784:parameter/career-backend/jwt-secret"
+        },
+        {
+          "name": "AUTH_REFRESH_SECRET",
+          "valueFrom": "arn:aws:ssm:ap-southeast-1:412381742784:parameter/career-backend/refresh-secret"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/career-backend",
+          "awslogs-region": "ap-southeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}

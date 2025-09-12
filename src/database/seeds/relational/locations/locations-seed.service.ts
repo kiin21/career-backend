@@ -8,19 +8,13 @@ export class LocationsSeedService {
   constructor(
     @InjectRepository(LocationsEntity)
     private repository: Repository<LocationsEntity>,
-  ) {}
+  ) { }
 
   async run() {
     const count = await this.repository.count();
 
     if (!count) {
-      const locations = [
-        { name: 'Hanoi' },
-        { name: 'Ho Chi Minh City' },
-        { name: 'Da Nang' },
-        { name: 'Remote' },
-        { name: 'Hybrid' },
-      ];
+      const locations = [{ name: 'Onsite' }, { name: 'Remote' }, { name: 'Hybrid' }];
 
       for (const location of locations) {
         await this.repository.save(this.repository.create(location));

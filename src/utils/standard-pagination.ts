@@ -1,9 +1,6 @@
 import { IPaginationOptions } from './types/pagination-options';
-import {
-  StandardPaginationResponseDto,
-  PaginationMetaDto,
-  PaginationLinksDto,
-} from './dto/standard-pagination-response.dto';
+import { StandardPaginationResponseDto } from './dto/standard-pagination-response.dto';
+import { PaginationInfoDto, PaginationLinksDto } from './dto/base-response.dto';
 
 export interface StandardPaginationOptions extends IPaginationOptions {
   totalItems: number;
@@ -11,7 +8,7 @@ export interface StandardPaginationOptions extends IPaginationOptions {
   queryParams?: Record<string, any>;
 }
 
-export const standardPagination = <T>(
+export const StandardPagination = <T>(
   data: T[],
   options: StandardPaginationOptions,
 ): StandardPaginationResponseDto<T> => {
@@ -26,11 +23,7 @@ export const standardPagination = <T>(
     const params = new URLSearchParams({
       page: pageNum.toString(),
       limit: limit.toString(),
-      ...Object.fromEntries(
-        Object.entries(queryParams).filter(
-          ([_, value]) => value !== undefined && value !== null,
-        ),
-      ),
+      ...Object.fromEntries(Object.entries(queryParams).filter(([, value]) => value !== undefined && value !== null)),
     });
     return `${baseUrl}?${params.toString()}`;
   };
@@ -43,7 +36,7 @@ export const standardPagination = <T>(
     previous: hasPrevious ? buildUrl(page - 1) : null,
   };
 
-  const pagination: PaginationMetaDto = {
+  const pagination: PaginationInfoDto = {
     current_page: page,
     per_page: limit,
     total_items: totalItems,

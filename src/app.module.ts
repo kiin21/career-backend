@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
@@ -18,6 +18,14 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { AllConfigType } from './config/config.type';
 import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
+import { RequestIdMiddleware } from './middlewares/request-id.middleware';
+import { JobsModule } from './jobs/jobs.module';
+import { IndustriesModule } from './industries/industries.module';
+import { companiesModule } from './companies/companies.module';
+import { locationsModule } from './locations/locations.module';
+import { JobCategoriesModule } from './job-categories/job-categories.module';
+import { ApplicationsModule } from './applications/applications.module';
+import { JobSkillsModule } from './job-skills/job-skills.module';
 
 const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
   useClass: TypeOrmConfigService,
@@ -25,20 +33,6 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
     return new DataSource(options).initialize();
   },
 });
-
-import { JobsModule } from './jobs/jobs.module';
-
-import { IndustriesModule } from './industries/industries.module';
-
-import { companiesModule } from './companies/companies.module';
-
-import { locationsModule } from './locations/locations.module';
-
-import { JobCategoriesModule } from './job-categories/job-categories.module';
-
-import { ApplicationsModule } from './applications/applications.module';
-
-import { JobSkillsModule } from './job-skills/job-skills.module';
 
 @Module({
   imports: [
@@ -87,4 +81,8 @@ import { JobSkillsModule } from './job-skills/job-skills.module';
     HomeModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}

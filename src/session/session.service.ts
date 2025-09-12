@@ -13,17 +13,13 @@ export class SessionService {
     return this.sessionRepository.findById(id);
   }
 
-  create(
-    data: Omit<Session, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>,
-  ): Promise<Session> {
+  create(data: Omit<Session, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<Session> {
     return this.sessionRepository.create(data);
   }
 
   update(
     id: Session['id'],
-    payload: Partial<
-      Omit<Session, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>
-    >,
+    payload: Partial<Omit<Session, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>,
   ): Promise<Session | null> {
     return this.sessionRepository.update(id, payload);
   }
@@ -36,10 +32,7 @@ export class SessionService {
     return this.sessionRepository.deleteByuser_id(conditions);
   }
 
-  deleteByuser_idWithExclude(conditions: {
-    user_id: User['id'];
-    excludeSessionId: Session['id'];
-  }): Promise<void> {
+  deleteByuser_idWithExclude(conditions: { user_id: User['id']; excludeSessionId: Session['id'] }): Promise<void> {
     return this.sessionRepository.deleteByuser_idWithExclude(conditions);
   }
 }

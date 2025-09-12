@@ -13,12 +13,9 @@ export class JobCategoriesService {
   constructor(
     // Dependencies here
     private readonly jobCategoriesRepository: JobCategoriesRepository,
-  ) { }
+  ) {}
 
-  async create(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    createJobCategoriesDto: CreateJobCategoriesDto,
-  ) {
+  async create(createJobCategoriesDto: CreateJobCategoriesDto) {
     // Do not remove comment below.
     // <creating-property />
 
@@ -30,11 +27,7 @@ export class JobCategoriesService {
     });
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }) {
     return this.jobCategoriesRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,

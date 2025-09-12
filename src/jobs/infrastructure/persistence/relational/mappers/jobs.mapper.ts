@@ -1,6 +1,6 @@
 import { Jobs } from '../../../../domain/jobs';
 import { JobsEntity } from '../entities/jobs.entity';
-import { companiesMapper } from '../../../../../companies/infrastructure/persistence/relational/mappers/companies.mapper';
+import { CompaniesMapper } from '../../../../../companies/infrastructure/persistence/relational/mappers/companies.mapper';
 import { JobCategoriesMapper } from '../../../../../job-categories/infrastructure/persistence/relational/mappers/job-categories.mapper';
 import { LocationsMapper } from '../../../../../locations/infrastructure/persistence/relational/mappers/locations.mapper';
 
@@ -25,7 +25,7 @@ export class JobsMapper {
     domainEntity.is_active = raw.is_active;
 
     if (raw.company) {
-      domainEntity.company = companiesMapper.toDomain(raw.company);
+      domainEntity.company = CompaniesMapper.toDomain(raw.company);
     }
 
     if (raw.category) {
@@ -58,31 +58,23 @@ export class JobsMapper {
     persistenceEntity.salary_min = domainEntity.salary_min ?? null;
     persistenceEntity.salary_max = domainEntity.salary_max ?? null;
     persistenceEntity.salary_currency = domainEntity.salary_currency || 'VND';
-    persistenceEntity.application_method =
-      domainEntity.application_method ?? null;
+    persistenceEntity.application_method = domainEntity.application_method ?? null;
     persistenceEntity.application_url = domainEntity.application_url ?? null;
-    persistenceEntity.application_email =
-      domainEntity.application_email ?? null;
+    persistenceEntity.application_email = domainEntity.application_email ?? null;
     persistenceEntity.apply_count = domainEntity.apply_count || 0;
     persistenceEntity.deadline = domainEntity.deadline ?? null;
     persistenceEntity.is_active = domainEntity.is_active ?? true;
 
     if (domainEntity.company) {
-      persistenceEntity.company = companiesMapper.toPersistence(
-        domainEntity.company,
-      );
+      persistenceEntity.company = CompaniesMapper.toPersistence(domainEntity.company);
     }
 
     if (domainEntity.category) {
-      persistenceEntity.category = JobCategoriesMapper.toPersistence(
-        domainEntity.category,
-      );
+      persistenceEntity.category = JobCategoriesMapper.toPersistence(domainEntity.category);
     }
 
     if (domainEntity.location_ref) {
-      persistenceEntity.locationRef = LocationsMapper.toPersistence(
-        domainEntity.location_ref,
-      );
+      persistenceEntity.locationRef = LocationsMapper.toPersistence(domainEntity.location_ref);
     }
 
     persistenceEntity.created_at = domainEntity.created_at;

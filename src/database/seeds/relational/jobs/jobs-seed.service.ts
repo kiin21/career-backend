@@ -17,7 +17,7 @@ export class JobsSeedService {
     private categoriesRepository: Repository<JobCategoriesEntity>,
     @InjectRepository(LocationsEntity)
     private locationsRepository: Repository<LocationsEntity>,
-  ) {}
+  ) { }
 
   async run() {
     const count = await this.jobsRepository.count();
@@ -58,17 +58,14 @@ export class JobsSeedService {
       });
 
       // Get locations
-      const hanoi = await this.locationsRepository.findOne({
-        where: { name: 'Hanoi' },
-      });
-      const hcmc = await this.locationsRepository.findOne({
-        where: { name: 'Ho Chi Minh City' },
-      });
-      const danang = await this.locationsRepository.findOne({
-        where: { name: 'Da Nang' },
+      const onsite = await this.locationsRepository.findOne({
+        where: { name: 'Onsite' },
       });
       const remote = await this.locationsRepository.findOne({
         where: { name: 'Remote' },
+      });
+      const hybrid = await this.locationsRepository.findOne({
+        where: { name: 'Hybrid' },
       });
 
       const jobs = [
@@ -76,11 +73,10 @@ export class JobsSeedService {
         {
           company: technova!,
           category: engineering!,
-          locationRef: hanoi!,
+          locationRef: onsite!,
           title: 'Software Engineer',
           description: 'Develop backend systems and APIs for our AI platform',
-          requirements:
-            'Bachelor in CS, 1+ years experience with Python, REST APIs',
+          requirements: 'Bachelor in CS, 1+ years experience with Python, REST APIs',
           location: 'Hanoi',
           employment_type: 'full_time',
           experience_level: 'junior',
@@ -100,8 +96,8 @@ export class JobsSeedService {
           title: 'AI Research Intern',
           description: 'Assist in ML research projects and model development',
           requirements: 'Final year student, Python, basic ML knowledge',
-          location: 'Remote',
-          employment_type: 'internship',
+          location: null,
+          employment_type: 'part_time',
           experience_level: 'internship',
           salary_min: 5000000,
           salary_max: 8000000,
@@ -115,7 +111,7 @@ export class JobsSeedService {
         {
           company: technova!,
           category: engineering!,
-          locationRef: hcmc!,
+          locationRef: onsite!,
           title: 'DevOps Engineer',
           description: 'Maintain CI/CD pipelines and cloud infrastructure',
           requirements: 'DevOps experience, Docker, Kubernetes, AWS',
@@ -136,7 +132,7 @@ export class JobsSeedService {
         {
           company: greenbank!,
           category: business!,
-          locationRef: hanoi!,
+          locationRef: onsite!,
           title: 'Financial Analyst',
           description: 'Support investment analysis and financial reporting',
           requirements: 'Finance degree, Excel proficiency, analytical skills',
@@ -155,11 +151,10 @@ export class JobsSeedService {
         {
           company: greenbank!,
           category: business!,
-          locationRef: hcmc!,
+          locationRef: onsite!,
           title: 'Branch Manager',
           description: 'Lead branch operations and customer service',
-          requirements:
-            'Management experience, finance background, leadership skills',
+          requirements: 'Management experience, finance background, leadership skills',
           location: 'Ho Chi Minh City',
           employment_type: 'full_time',
           experience_level: 'senior',
@@ -180,9 +175,8 @@ export class JobsSeedService {
           locationRef: remote!,
           title: 'Content Designer',
           description: 'Create engaging learning content for online courses',
-          requirements:
-            'Content creation experience, instructional design knowledge',
-          location: 'Remote',
+          requirements: 'Content creation experience, instructional design knowledge',
+          location: null,
           employment_type: 'full_time',
           experience_level: 'junior',
           salary_min: 18000000,
@@ -197,7 +191,7 @@ export class JobsSeedService {
         {
           company: edunext!,
           category: engineering!,
-          locationRef: hanoi!,
+          locationRef: hybrid!,
           title: 'Frontend Developer',
           description: 'Build responsive user interfaces for learning platform',
           requirements: 'React, JavaScript, CSS, responsive design',
@@ -220,7 +214,7 @@ export class JobsSeedService {
           title: 'Data Analyst Intern',
           description: 'Analyze learning platform usage and performance data',
           requirements: 'SQL knowledge, Excel, basic Python, statistics',
-          location: 'Remote',
+          location: null,
           employment_type: 'internship',
           experience_level: 'internship',
           salary_min: 4000000,
@@ -237,11 +231,10 @@ export class JobsSeedService {
         {
           company: healthplus!,
           category: healthcare!,
-          locationRef: hcmc!,
+          locationRef: onsite!,
           title: 'Nurse Practitioner',
           description: 'Provide direct patient care and clinical support',
-          requirements:
-            'Nursing degree, clinical experience, patient care skills',
+          requirements: 'Nursing degree, clinical experience, patient care skills',
           location: 'Ho Chi Minh City',
           employment_type: 'full_time',
           experience_level: 'middle',
@@ -257,11 +250,10 @@ export class JobsSeedService {
         {
           company: healthplus!,
           category: healthcare!,
-          locationRef: hanoi!,
+          locationRef: hybrid!,
           title: 'Clinical Research Assistant',
           description: 'Support medical research trials and data collection',
-          requirements:
-            'Healthcare background, research experience, attention to detail',
+          requirements: 'Healthcare background, research experience, attention to detail',
           location: 'Hanoi',
           employment_type: 'full_time',
           experience_level: 'junior',
@@ -281,7 +273,7 @@ export class JobsSeedService {
           title: 'Medical Data Analyst',
           description: 'Analyze healthcare data for insights and reporting',
           requirements: 'SQL, healthcare domain knowledge, statistics',
-          location: 'Remote',
+          location: null,
           employment_type: 'full_time',
           experience_level: 'middle',
           salary_min: 25000000,
@@ -298,7 +290,7 @@ export class JobsSeedService {
         {
           company: buildit!,
           category: engineering!,
-          locationRef: danang!,
+          locationRef: onsite!,
           title: 'Civil Engineer',
           description: 'Design and oversee construction projects',
           requirements: 'Civil Engineering degree, AutoCAD, project management',
@@ -317,11 +309,10 @@ export class JobsSeedService {
         {
           company: buildit!,
           category: management!,
-          locationRef: hcmc!,
+          locationRef: onsite!,
           title: 'Safety Officer',
           description: 'Ensure construction site safety and compliance',
-          requirements:
-            'Safety certification, compliance knowledge, field experience',
+          requirements: 'Safety certification, compliance knowledge, field experience',
           location: 'Ho Chi Minh City',
           employment_type: 'full_time',
           experience_level: 'junior',
@@ -337,11 +328,10 @@ export class JobsSeedService {
         {
           company: buildit!,
           category: engineering!,
-          locationRef: hanoi!,
+          locationRef: hybrid!,
           title: 'Architect',
           description: 'Design infrastructure and building projects',
-          requirements:
-            'Architecture degree, CAD software, creative design skills',
+          requirements: 'Architecture degree, CAD software, creative design skills',
           location: 'Hanoi',
           employment_type: 'full_time',
           experience_level: 'senior',
@@ -357,13 +347,12 @@ export class JobsSeedService {
         {
           company: buildit!,
           category: management!,
-          locationRef: hcmc!,
+          locationRef: hybrid!,
           title: 'Project Coordinator',
           description: 'Coordinate construction projects and timelines',
-          requirements:
-            'Project management, coordination skills, construction knowledge',
+          requirements: 'Project management, coordination skills, construction knowledge',
           location: 'Ho Chi Minh City',
-          employment_type: 'contract',
+          employment_type: 'part_time',
           experience_level: 'middle',
           salary_min: 25000000,
           salary_max: 32000000,

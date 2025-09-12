@@ -1,5 +1,5 @@
 import { JobsEntity } from '../entities/jobs.entity';
-import { companiesMapper } from '../../../../../companies/infrastructure/persistence/relational/mappers/companies.mapper';
+import { CompaniesMapper } from '../../../../../companies/infrastructure/persistence/relational/mappers/companies.mapper';
 import { ListJobsResponse } from '../../../../domain/list-jobs-response';
 
 export class ListJobsMapper {
@@ -14,7 +14,7 @@ export class ListJobsMapper {
     domainEntity.is_active = raw.is_active;
 
     if (raw.company) {
-      domainEntity.company = companiesMapper.toDomain(raw.company);
+      domainEntity.company = CompaniesMapper.toDomain(raw.company);
     }
 
     domainEntity.created_at = raw.created_at;

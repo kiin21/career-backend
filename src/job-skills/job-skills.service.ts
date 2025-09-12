@@ -26,11 +26,7 @@ export class JobSkillsService {
     });
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
+  findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }) {
     return this.jobSkillsRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,

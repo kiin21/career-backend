@@ -1,0 +1,65 @@
+{
+  "family": "career-backend-test-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::412381742784:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "career-backend-test",
+      "image": "412381742784.dkr.ecr.ap-southeast-1.amazonaws.com/career-backend:latest",
+      "essential": true,
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "DATABASE_HOST",
+          "value": "career-backend-db.choukgees85n.ap-southeast-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DATABASE_USERNAME",
+          "value": "career_admin"
+        },
+        {
+          "name": "DATABASE_PASSWORD",
+          "value": "placeholder"
+        },
+        {
+          "name": "DATABASE_NAME",
+          "value": "career_production"
+        },
+        {
+          "name": "DATABASE_TYPE",
+          "value": "postgres"
+        },
+        {
+          "name": "DATABASE_PORT",
+          "value": "5432"
+        },
+        {
+          "name": "DATABASE_SSL_ENABLED",
+          "value": "true"
+        },
+        {
+          "name": "AUTH_JWT_SECRET",
+          "value": "test-secret"
+        },
+        {
+          "name": "AUTH_REFRESH_SECRET",
+          "value": "test-refresh-secret"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/career-backend",
+          "awslogs-region": "ap-southeast-1",
+          "awslogs-stream-prefix": "test"
+        }
+      }
+    }
+  ]
+}

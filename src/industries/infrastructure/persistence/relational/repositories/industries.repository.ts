@@ -17,17 +17,11 @@ export class IndustriesRelationalRepository implements IndustriesRepository {
 
   async create(data: Industries): Promise<Industries> {
     const persistenceModel = IndustriesMapper.toPersistence(data);
-    const newEntity = await this.industriesRepository.save(
-      this.industriesRepository.create(persistenceModel),
-    );
+    const newEntity = await this.industriesRepository.save(this.industriesRepository.create(persistenceModel));
     return IndustriesMapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }): Promise<Industries[]> {
+  async findAllWithPagination({ paginationOptions }: { paginationOptions: IPaginationOptions }): Promise<Industries[]> {
     const entities = await this.industriesRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
@@ -52,10 +46,7 @@ export class IndustriesRelationalRepository implements IndustriesRepository {
     return entities.map((entity) => IndustriesMapper.toDomain(entity));
   }
 
-  async update(
-    id: Industries['id'],
-    payload: Partial<Industries>,
-  ): Promise<Industries> {
+  async update(id: Industries['id'], payload: Partial<Industries>): Promise<Industries> {
     const entity = await this.industriesRepository.findOne({
       where: { id: Number(id) },
     });

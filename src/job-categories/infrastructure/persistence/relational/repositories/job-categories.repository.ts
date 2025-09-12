@@ -9,9 +9,7 @@ import { JobCategoriesMapper } from '../mappers/job-categories.mapper';
 import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
-export class JobCategoriesRelationalRepository
-  implements JobCategoriesRepository
-{
+export class JobCategoriesRelationalRepository implements JobCategoriesRepository {
   constructor(
     @InjectRepository(JobCategoriesEntity)
     private readonly jobCategoriesRepository: Repository<JobCategoriesEntity>,
@@ -19,9 +17,7 @@ export class JobCategoriesRelationalRepository
 
   async create(data: JobCategories): Promise<JobCategories> {
     const persistenceModel = JobCategoriesMapper.toPersistence(data);
-    const newEntity = await this.jobCategoriesRepository.save(
-      this.jobCategoriesRepository.create(persistenceModel),
-    );
+    const newEntity = await this.jobCategoriesRepository.save(this.jobCategoriesRepository.create(persistenceModel));
     return JobCategoriesMapper.toDomain(newEntity);
   }
 
@@ -38,9 +34,7 @@ export class JobCategoriesRelationalRepository
     return entities.map((entity) => JobCategoriesMapper.toDomain(entity));
   }
 
-  async findById(
-    id: JobCategories['id'],
-  ): Promise<NullableType<JobCategories>> {
+  async findById(id: JobCategories['id']): Promise<NullableType<JobCategories>> {
     const entity = await this.jobCategoriesRepository.findOne({
       where: { id: Number(id) },
     });
@@ -56,10 +50,7 @@ export class JobCategoriesRelationalRepository
     return entities.map((entity) => JobCategoriesMapper.toDomain(entity));
   }
 
-  async update(
-    id: JobCategories['id'],
-    payload: Partial<JobCategories>,
-  ): Promise<JobCategories> {
+  async update(id: JobCategories['id'], payload: Partial<JobCategories>): Promise<JobCategories> {
     const entity = await this.jobCategoriesRepository.findOne({
       where: { id: Number(id) },
     });

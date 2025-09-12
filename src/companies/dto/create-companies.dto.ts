@@ -6,4 +6,8 @@ export class CreatecompaniesDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @ApiProperty({ example: 'https://example.com/logo.png', required: false })
+  @IsString()
+  logo_url: string | null;
 }

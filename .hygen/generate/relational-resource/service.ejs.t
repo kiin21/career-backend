@@ -31,12 +31,12 @@ export class <%= h.inflection.transform(name, ['pluralize']) %>Service {
     });
   }
 
-  findAllWithPagination({
+  findManyWithPagination({
     paginationOptions,
   }: {
     paginationOptions: IPaginationOptions;
-  }) {
-    return this.<%= h.inflection.camelize(name, true) %>Repository.findAllWithPagination({
+  }): Promise<{ data: <%= name %>[]; totalItems: number }> {
+    return this.<%= h.inflection.camelize(name, true) %>Repository.findManyWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
         limit: paginationOptions.limit,

@@ -11,11 +11,11 @@ export abstract class <%= name %>Repository {
     data: Omit<<%= name %>, 'id' | 'created_at' | 'updated_at'>,
   ): Promise<<%= name %>>;
 
-  abstract findAllWithPagination({
+  abstract findManyWithPagination({
     paginationOptions,
   }: {
     paginationOptions: IPaginationOptions;
-  }): Promise<<%= name %>[]>;
+  }): Promise<{ data: <%= name %>[]; totalItems: number }>;
 
   abstract findById(id: <%= name %>['id']): Promise<NullableType<<%= name %>>>;
 

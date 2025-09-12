@@ -37,7 +37,7 @@ export class CompaniesEntity extends EntityRelationalHelper {
   contact_email: string | null;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  logoUrl: string | null;
+  logo_url: string | null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   address: string | null;
